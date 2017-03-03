@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+</head>
+
+<body>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <a href="javascript:void(0);" class="sui-btn btn-primary">
+        	<i class="sui-icon icon-pencil"></i>
+        	<input type="file" name="file" id="ff" />
+        </a>
+        <p>上传文件：
+        </p>
+        <input type="button" value="上传" onclick="doUpload()">
+    </form>
+    <script>
+    function doUpload() {
+        var formData = new FormData($("#uploadForm")[0]);
+        if ($('#ff').val() !== '') {
+            $.ajax({
+                url: 'http://121.42.42.155:8888/formdata',
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(returndata) {
+                    var para = document.createElement("p");
+                    var node = document.createTextNode(returndata[0].name)
+                    para.appendChild(node);
+
+                    var element = document.getElementById("ff");
+                    element.appendChild(para);
+                },
+                error: function(returndata) {
+                    alert(returndata);
+                }
+            });
+        } else {
+            alert('请选择文件。')
+        }
+    }
+    </script>
+</body>
+
+</html>
