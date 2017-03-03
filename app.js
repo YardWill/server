@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var waibao = require('./routes/waibao');
 
 var busboy = require('connect-busboy');
 
@@ -32,6 +33,7 @@ app.use(busboy({
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/waibao', waibao);
 
 
 // catch 404 and forward to error handler
