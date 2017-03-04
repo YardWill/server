@@ -1,15 +1,4 @@
-// const tmp = (data)=> {
-//     return `
-//     <table>
-//     <tr></tr>
-//     ${data.map((e) = {
-//         return `<tr></tr>`
-//     })}
-//     </table>
-//     `;
-// };
-
-$.get('http://localhost:8888/waibao/read', (res) => {
+$.get('http://121.42.42.155:8888/waibao/read', (res) => {
     let tmp = '';
     res.map((e) => {
         // console.log(e);
