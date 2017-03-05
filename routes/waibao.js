@@ -36,12 +36,6 @@ function insert(data) {
         });
 }
 
-// function insertURl(data) {
-//     connection.query(sqlInsert, { href: data.href }, function(error, results, fields) {
-//         if (error) throw error;
-//     });
-// }
-
 function getData(arr, i) {
     let data = {};
     var url = 'http://xyq.yananbdw.com/xyq_cbg_role_processor.php?action=guhao&url=' + encodeURIComponent(arr[i]);
@@ -56,7 +50,7 @@ function getData(arr, i) {
     request(opt, function(error, response, body) {
         var info = JSON.parse(body).info.evaluate_info;
         console.log(info);
-        data.href = url;
+        data.href = arr[i];
         data.goumai_money = info[10].value;
         data.zhesuan_money = info[9].value;
         data.zhejia = info[11].value;
