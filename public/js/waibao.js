@@ -9,3 +9,9 @@ $.get('http://121.42.42.155:8888/waibao/read', (res) => {
     console.log(tmp);
     $('#table').append(tmp);
 })
+
+$('#empty').on('click', () => {
+    $.get('http://121.42.42.155:8888/waibao/empty', (res) => {
+        alert(res);
+    })
+})
