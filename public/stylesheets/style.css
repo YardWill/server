@@ -20,4 +20,8 @@ td{
 }
 div{
   border: #00B7FF 1px solid;
+  background-color: #00B7FF;
+  text-align: center;
+  color: #ffffff;
+  line-height: 2;
 }
