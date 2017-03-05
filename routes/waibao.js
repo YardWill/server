@@ -36,9 +36,8 @@ function insert(data) {
         });
 }
 
-function getData(arr, i) {
-    let data = {};
-    var url = 'http://xyq.yananbdw.com/xyq_cbg_role_processor.php?action=guhao&url=' + encodeURIComponent(arr[i]);
+function getData(data) {
+    var url = 'http://xyq.yananbdw.com/xyq_cbg_role_processor.php?action=guhao&url=' + encodeURIComponent(data.href);
     const opt = {
         url,
         encoding: null,
@@ -46,12 +45,10 @@ function getData(arr, i) {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36',
         },
     };
-    var href = arr[i];
 
     request(opt, function(error, response, body) {
         var info = JSON.parse(body).info.evaluate_info;
         console.log(info);
-        data.href = href;
         data.goumai_money = info[10].value;
         data.zhesuan_money = info[9].value;
         data.zhejia = info[11].value;
@@ -60,28 +57,21 @@ function getData(arr, i) {
         insert(data);
         // sleep(500);
     }).on('end', function() {
-        i++;
-        if (arr[i]) {
-            getData(arr[i], i);
-        }
     }).on('error', function(err) {});
 }
 
 function testHref(data) {
-    var arr = [];
-    var flag = 1;
-    var i = 0;
     connection.query(sqlSelect, ['href', data.href], function(error, results, fields) {
         if (error) throw error;
-        if (results[0] && results[0].goumai_money !== data.money) {
-            flag = 0;
+        // if (results[0]) {
+        //     console.log(results[0], results[0].goumai_money, data.money.slice(1, -3));
+        // }
+        
+        if (results[0] && results[0].goumai_money == data.money.slice(1, -3)) {
+        } else {
+            getData(data);
         }
     });
-    if (flag) {
-        arr.push(data.href);
-        getData(arr, i);
-        // sleep(1000);
-    }
 }
 
 router.post('/write', function(req, res, next) {
