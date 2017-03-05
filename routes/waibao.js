@@ -104,14 +104,14 @@ router.get('/empty', function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     connection.query('DELETE FROM Cangbaoge', function(error, results, fields) {
         if (error) throw error;
-        res.send(results);
+        res.send('删除成功');
     });
 });
 router.get('/read', function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     connection.query('SELECT * FROM Cangbaoge', function(error, results, fields) {
         if (error) throw error;
-        res.send('删除成功');
+        res.send(results);
     });
 });
 
