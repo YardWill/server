@@ -67,7 +67,7 @@ function testHref(data) {
         //     console.log(results[0], results[0].goumai_money, data.money.slice(1, -3));
         // }
         
-        if (results[0] && results[0].goumai_money == data.money.slice(1, -3)) {
+        if (results[0]) {
         } else {
             getData(data);
         }
