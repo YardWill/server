@@ -25,7 +25,6 @@ var sqlSelect = "SELECT * FROM Cangbaoge WHERE ?? = ?";
 var sqlInsert = "INSERT INTO Cangbaoge SET ?";
 
 function insert(data) {
-    console.log(data.href);
     connection.query(sqlInsert,
     { href: data.href, goumai_money: data.goumai_money, zhesuan_money: data.zhesuan_money, zhejia: data.zhejia, xingjiabi: data.xingjiabi },
     function(error, results, fields) {
@@ -39,8 +38,8 @@ function getData(data) {
         url,
         encoding: null,
         headers: {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36'
-        }
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36',
+        },
     };
     request(opt, function(error, response, body) {
         var info = JSON.parse(body).info.evaluate_info;
@@ -48,11 +47,10 @@ function getData(data) {
         data.zhesuan_money = info[9].value;
         data.zhejia = info[11].value;
         data.xingjiabi = info[12].value.slice(-12, -4);
+        console.log(data);
         insert(data);
     }).on('end', function() {
-        // console.log(2);
     }).on('error', function(err) {
-        // console.log(err);
     });
 }
 
@@ -84,7 +82,6 @@ router.get('/read', function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     connection.query('SELECT * FROM Cangbaoge', function(error, results, fields) {
         if (error) throw error;
-        console.log(results);
         res.send(results);
     });
 });
