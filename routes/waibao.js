@@ -46,11 +46,12 @@ function getData(arr, i) {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36',
         },
     };
+    var href = arr[i];
 
     request(opt, function(error, response, body) {
         var info = JSON.parse(body).info.evaluate_info;
         console.log(info);
-        data.href = arr[i];
+        data.href = href;
         data.goumai_money = info[10].value;
         data.zhesuan_money = info[9].value;
         data.zhejia = info[11].value;
