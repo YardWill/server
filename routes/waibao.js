@@ -23,6 +23,7 @@ connection.connect(function(err) {
 
 var sqlSelect = "SELECT * FROM Cangbaoge WHERE ?? = ?";
 var sqlInsert = "INSERT INTO Cangbaoge SET ?";
+var sqlUpdate = "UPDATE Cangbaoge SET goumai_money = ?, zhesuan_money = ?, zhejia = ?, xingjiabi = ? WHERE id = ?";
 
 function sleep(milliSeconds) {
     var startTime = new Date().getTime(); // get the current time   
@@ -63,10 +64,6 @@ function getData(data) {
 function testHref(data) {
     connection.query(sqlSelect, ['href', data.href], function(error, results, fields) {
         if (error) throw error;
-        // if (results[0]) {
-        //     console.log(results[0], results[0].goumai_money, data.money.slice(1, -3));
-        // }
-        
         if (results[0]) {
         } else {
             getData(data);
@@ -77,7 +74,7 @@ function testHref(data) {
 router.post('/write', function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     var body = req.body;
-    for (var p in body) { // 方法 
+    for (var p in body) {
         if (p !== 'v') {
             testHref(JSON.parse(body[p]));
         }
@@ -86,14 +83,12 @@ router.post('/write', function(req, res, next) {
 });
 
 router.get('/empty', function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
     connection.query('DELETE FROM Cangbaoge', function(error, results, fields) {
         if (error) throw error;
         res.send('删除成功');
     });
 });
 router.get('/read', function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
     connection.query('SELECT * FROM Cangbaoge', function(error, results, fields) {
         if (error) throw error;
         res.send(results);
@@ -102,6 +97,51 @@ router.get('/read', function(req, res, next) {
 
 router.get('/watch', function(req, res, next) {
     res.render('waibaoshuju');
+});
+
+function update(data) {
+    connection.query(sqlUpdate, [data.goumai_money, data.zhesuan_money, data.zhejia, data.xingjiabi, data.id], function(error, results, fields) {
+        if (error) throw error;
+    });
+}
+
+function paqu() {
+    connection.query('SELECT * FROM Cangbaoge WHERE zhesuan_money = 0 order by id limit 1;', function(error, results, fields) {
+        if (error) throw error;
+        if (results) {
+            const data = {
+                id: results[0].id,
+                href: results[0].href,
+            };
+            var url = 'http://xyq.yananbdw.com/xyq_cbg_role_processor.php?action=guhao&url=' + encodeURIComponent(data.href);
+            const opt = {
+                url,
+                encoding: null,
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36',
+                },
+            };
+
+            request(opt, function(error, response, body) {
+                var info = JSON.parse(body).info.evaluate_info;
+                console.log(info);
+                data.goumai_money = info[10].value;
+                data.zhesuan_money = info[9].value;
+                data.zhejia = info[11].value;
+                data.xingjiabi = info[12].value.slice(-12, -4);
+                update(data);
+            }).on('end', function() {
+                paqu();
+            }).on('error', function(err) {});
+        } else {
+            console.log('爬取完成');
+        }
+    });
+}
+
+router.get('/getData', function(req, res, next) {
+    paqu();
+    res.send({ success: true });
 });
 
 module.exports = router;

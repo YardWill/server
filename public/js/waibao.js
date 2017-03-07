@@ -16,3 +16,11 @@ $('#empty').on('click', () => {
         window.location.reload();
     })
 })
+
+$('#get').on('click', () => {
+    $.get('http://121.42.42.155:8888/waibao/getData', (res) => {
+        if (res.success) {
+            alert('正在爬取中，请勿重复点击，刷新可看到实时数据。');
+        }
+    })
+})
