@@ -108,7 +108,7 @@ function update(data) {
 function paqu() {
     connection.query('SELECT * FROM Cangbaoge WHERE zhesuan_money = 0 order by id limit 1;', function(error, results, fields) {
         if (error) throw error;
-        if (results) {
+        if (results[0]) {
             const data = {
                 id: results[0].id,
                 href: results[0].href,
