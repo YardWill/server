@@ -1,26 +1,23 @@
-$.get('http://121.42.42.155:8888/waibao/read', (res) => {
+$.get('/waibao/read', (res) => {
     let tmp = '';
     res.map((e) => {
-        // console.log(e);
-        const number = e.xingjiabi.replace(/[^0-9]/ig, '');
-        const a = `${number === '' ? '暂无性价比数据' : number.substr(0, 2) + '.' + number.substr(2) + '%'}`;
-        tmp += `<tr><td>${e.id}</td><td><a href="${e.href}">${e.href}</a></td><td>${e.goumai_money}</td><td>${e.zhesuan_money}</td><td>${e.zhejia}</td><td>${a}</td></tr>`;
-    })
+        tmp += `<tr><td>${e.id}</td><td><a href="${e.href}">${e.href}</a></td>/tr>`;
+    });
     console.log(tmp);
     $('#table').append(tmp);
-})
+});
 
 $('#empty').on('click', () => {
-    $.get('http://121.42.42.155:8888/waibao/empty', (res) => {
+    $.get('/waibao/empty', (res) => {
         alert(res);
         window.location.reload();
-    })
-})
+    });
+});
 
 $('#get').on('click', () => {
-    $.get('http://121.42.42.155:8888/waibao/getData', (res) => {
+    $.get('/waibao/getexl', (res) => {
         if (res.success) {
             alert('正在爬取中，请勿重复点击，刷新可看到实时数据。');
         }
-    })
-})
+    });
+});
