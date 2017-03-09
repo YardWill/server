@@ -40,7 +40,7 @@ router.get('/getexl', (req, res, next) => {
             },
         };
         console.log(wb.Sheets.mySheet);
-        xlsx.writeFile(wb, path.join('/root/server/public/excel/', path.basename('cangbaoge.xlsx')));
+        xlsx.writeFile(wb, path.join('/root/server/public/', path.basename('cangbaoge.xlsx')));
         res.send(results);
     });
 });
