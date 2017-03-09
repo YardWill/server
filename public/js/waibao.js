@@ -1,7 +1,7 @@
 $.get('/waibao/read', (res) => {
     let tmp = '';
     res.map((e) => {
-        tmp += `<tr><td>${e.id}</td><td><a href="${e.href}">${e.href}</a></td>/tr>`;
+        tmp += `<tr><td>${e.id}</td><td><a href="${e.href}">${e.href}</a></td></tr>`;
     });
     console.log(tmp);
     $('#table').append(tmp);
